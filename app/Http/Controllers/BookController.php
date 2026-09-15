@@ -9,11 +9,11 @@ class BookController extends Controller
     public function index()
     {
         $books = [
-            ['id' => 1, 'judul' => 'Pemrograman PHP', 'penulis' => 'Andi Wijaya', 'tahun' => 2020],
-            ['id' => 2, 'judul' => 'Laravel untuk Pemula', 'penulis' => 'Budi Santoso', 'tahun' => 2021],
-            ['id' => 3, 'judul' => 'Basis Data', 'penulis' => 'Citra Dewi', 'tahun' => 2019],
-            ['id' => 4, 'judul' => 'Algoritma dan Pemrograman', 'penulis' => 'Dedi Kurniawan', 'tahun' => 2022],
-            ['id' => 5, 'judul' => 'Pemrograman Berorientasi Objek', 'penulis' => 'Eka Putri', 'tahun' => 2018],
+            ['id' => 1, 'judul' => 'Bumi', 'penulis' => 'Tere Liye', 'tahun' => 2014],
+            ['id' => 2, 'judul' => 'Seporsi Mie Ayam Sebelum Mati', 'penulis' => 'Brian Khrisna', 'tahun' => 2025],
+            ['id' => 3, 'judul' => 'Btuesday with morrie', 'penulis' => 'Mitch Albom', 'tahun' => 1997],
+            ['id' => 4, 'judul' => 'Sang Alkemis', 'penulis' => 'Paulo Coelho', 'tahun' => 1998],
+            ['id' => 5, 'judul' => 'mindset', 'penulis' => 'Carol S. Dweck', 'tahun' => 2006],
         ];
 
         return view('books.index', compact('books'));
