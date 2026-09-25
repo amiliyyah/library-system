@@ -2,19 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use Illuminate\Http\Request;
 
 class BookController extends Controller
 {
     public function index()
     {
-        $books = [
-            ['id' => 1, 'judul' => 'Bumi', 'penulis' => 'Tere Liye', 'tahun' => 2014],
-            ['id' => 2, 'judul' => 'Seporsi Mie Ayam Sebelum Mati', 'penulis' => 'Brian Khrisna', 'tahun' => 2025],
-            ['id' => 3, 'judul' => 'Tuesday with morrie', 'penulis' => 'Mitch Albom', 'tahun' => 1997],
-            ['id' => 4, 'judul' => 'Sang Alkemis', 'penulis' => 'Paulo Coelho', 'tahun' => 1998],
-            ['id' => 5, 'judul' => 'mindset', 'penulis' => 'Carol S. Dweck', 'tahun' => 2006],
-        ];
+        $books = Book::all();
 
         return view('books.index', compact('books'));
     }
