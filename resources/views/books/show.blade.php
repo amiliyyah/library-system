@@ -4,13 +4,16 @@
 
 @section('content')
     <h2>Detail Buku</h2>
-    <p>ID Buku: {{ $id }}</p>
+    <p>ID Buku: {{ $book->id }}</p>
+    <p>Judul: {{ $book->title }}</p>
+    <p>Penulis: {{ $book->author }}</p>
+    <p>Tahun: {{ $book->year }}</p>
 
-    @if($stock > 0)
-        <p>Stok tersedia: {{ $stock }}</p>
+    @if($book->stock > 0)
+        <p>Stok tersedia: {{ $book->stock }}</p>
     @else
         <p>Stok sedang habis.</p>
     @endif
 
-    <a href="/books">← Kembali ke Daftar Buku</a>
+    <a href="{{ route('books.index') }}">← Kembali ke Daftar Buku</a>
 @endsection
