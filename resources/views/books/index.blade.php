@@ -1,6 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
+    @if (session('success'))
+        <p style="color:green">{{ session('success') }}</p>
+    @endif
+
     <h1>{{ $title }}</h1>
     <h2>Daftar Buku</h2>
 

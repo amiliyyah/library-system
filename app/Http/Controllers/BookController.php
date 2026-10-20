@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class BookController extends Controller
 {
@@ -19,16 +20,80 @@ class BookController extends Controller
         return view('books.create');
     }
 
+    private function bookRules(?int $ignoreId = null): array
+    {
+        return [
+            'title' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+                Rule::unique('books', 'title')->ignore($ignoreId),
+            ],
+            'author' => [
+                'required',
+                'string',
+                'min:3',
+                'max:255',
+                "regex:/^[\pL\s.,'-]+$/u",
+            ],
+            'year' => [
+                'required',
+                'integer',
+                'min:1900',
+                'max:' . date('Y'),
+            ],
+            'stock' => [
+                'required',
+                'integer',
+                'min:0',
+                'max:10000',
+            ],
+        ];
+    }
+
+    private function bookMessages(): array
+    {
+        return [
+            'required'      => ':attribute wajib diisi.',
+            'string'        => ':attribute harus berupa teks.',
+            'integer'       => ':attribute harus berupa bilangan bulat.',
+            'title.min'     => 'Judul buku minimal :min karakter.',
+            'title.max'     => 'Judul buku maksimal :max karakter.',
+            'title.unique'  => 'Judul buku sudah terdaftar.',
+            'author.min'    => 'Nama penulis minimal :min karakter.',
+            'author.max'    => 'Nama penulis maksimal :max karakter.',
+            'author.regex'  => 'Nama penulis hanya boleh berisi huruf, spasi, titik, koma, apostrof, dan tanda hubung.',
+            'year.min'      => 'Tahun terbit minimal :min.',
+            'year.max'      => 'Tahun terbit tidak boleh lebih dari tahun ini (:max).',
+            'stock.min'     => 'Stok tidak boleh negatif.',
+            'stock.max'     => 'Stok maksimal :max.',
+        ];
+    }
+
+    private function bookAttributes(): array
+    {
+        return [
+            'title'  => 'Judul buku',
+            'author' => 'Penulis',
+            'year'   => 'Tahun terbit',
+            'stock'  => 'Stok',
+        ];
+    }
+
     public function store(Request $request)
     {
-        Book::create([
-            'title'  => $request->title,
-            'author' => $request->author,
-            'year'   => $request->year,
-            'stock'  => $request->stock,
-        ]);
+        $validated = $request->validate(
+            $this->bookRules(),
+            $this->bookMessages(),
+            $this->bookAttributes()
+        );
 
-        return redirect()->route('books.index');
+        Book::create($validated);
+
+        return redirect()
+            ->route('books.index')
+            ->with('success', 'Data buku berhasil ditambahkan.');
     }
 
     public function show(Book $book)
@@ -43,14 +108,17 @@ class BookController extends Controller
 
     public function update(Request $request, Book $book)
     {
-        $book->update([
-            'title'  => $request->title,
-            'author' => $request->author,
-            'year'   => $request->year,
-            'stock'  => $request->stock,
-        ]);
+        $validated = $request->validate(
+            $this->bookRules($book->id),
+            $this->bookMessages(),
+            $this->bookAttributes()
+        );
 
-        return redirect()->route('books.index');
+        $book->update($validated);
+
+        return redirect()
+            ->route('books.index')
+            ->with('success', 'Data buku berhasil diperbarui.');
     }
 
     public function destroy(Book $book)
