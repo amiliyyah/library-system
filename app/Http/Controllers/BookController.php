@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Book;
+use App\Models\Category;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 
@@ -10,14 +11,15 @@ class BookController extends Controller
 {
     public function index()
     {
-        $books = Book::all();
+        $books = Book::with('category')->get();
         $title = 'Perpustakaan';
         return view('books.index', compact('books', 'title'));
     }
 
     public function create()
     {
-        return view('books.create');
+        $categories = Category::orderBy('name')->get();
+        return view('books.create', compact('categories'));
     }
 
     private function bookRules(?int $ignoreId = null): array
@@ -49,6 +51,10 @@ class BookController extends Controller
                 'min:0',
                 'max:10000',
             ],
+            'category_id' => [
+                'required',
+                'exists:categories,id',
+            ],
         ];
     }
 
@@ -68,16 +74,18 @@ class BookController extends Controller
             'year.max'      => 'Tahun terbit tidak boleh lebih dari tahun ini (:max).',
             'stock.min'     => 'Stok tidak boleh negatif.',
             'stock.max'     => 'Stok maksimal :max.',
+            'category_id.exists' => 'Kategori yang dipilih tidak tersedia.',
         ];
     }
 
     private function bookAttributes(): array
     {
         return [
-            'title'  => 'Judul buku',
-            'author' => 'Penulis',
-            'year'   => 'Tahun terbit',
-            'stock'  => 'Stok',
+            'title'       => 'Judul buku',
+            'author'      => 'Penulis',
+            'year'        => 'Tahun terbit',
+            'stock'       => 'Stok',
+            'category_id' => 'Kategori',
         ];
     }
 
@@ -103,7 +111,8 @@ class BookController extends Controller
 
     public function edit(Book $book)
     {
-        return view('books.edit', compact('book'));
+        $categories = Category::orderBy('name')->get();
+        return view('books.edit', compact('book', 'categories'));
     }
 
     public function update(Request $request, Book $book)

@@ -16,6 +16,7 @@
                 <strong>{{ $book->title }}</strong>
                 — {{ $book->author }} ({{ $book->year }})
                 | Stok: {{ $book->stock }}
+                | Kategori: {{ $book->category?->name ?? 'Belum ada kategori' }}
                 | <a href="{{ route('books.show', $book) }}">Lihat Detail</a>
                 | <a href="{{ route('books.edit', $book) }}">Edit</a>
                 |

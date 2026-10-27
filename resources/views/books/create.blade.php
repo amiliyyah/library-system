@@ -4,7 +4,7 @@
     <style>
         form div { margin-bottom: 16px; }
         form label { display: block; margin-bottom: 4px; font-weight: bold; }
-        form input { width: 300px; padding: 6px; }
+        form input, form select { width: 300px; padding: 6px; }
         form p { margin: 4px 0 0; font-size: 14px; }
         form button { padding: 6px 16px; margin-top: 4px; }
     </style>
@@ -42,6 +42,21 @@
             <label for="stock">Stok</label>
             <input type="text" id="stock" name="stock" value="{{ old('stock') }}" placeholder="Stok">
             @error('stock')
+                <p style="color:red">{{ $message }}</p>
+            @enderror
+        </div>
+
+        <div>
+            <label for="category_id">Kategori</label>
+            <select name="category_id" id="category_id">
+                <option value="">Pilih kategori</option>
+                @foreach ($categories as $category)
+                    <option value="{{ $category->id }}" @selected(old('category_id') == $category->id)>
+                        {{ $category->name }}
+                    </option>
+                @endforeach
+            </select>
+            @error('category_id')
                 <p style="color:red">{{ $message }}</p>
             @enderror
         </div>
