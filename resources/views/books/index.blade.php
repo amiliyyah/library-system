@@ -1,6 +1,15 @@
 @extends('layouts.app')
 
 @section('content')
+    {{-- Sapaan user yang sedang login --}}
+    <p>Selamat datang, <strong>{{ auth()->user()->name }}</strong></p>
+
+    {{-- Tombol Logout --}}
+    <form action="{{ route('logout') }}" method="POST" style="display:inline">
+        @csrf
+        <button type="submit">Logout</button>
+    </form>
+
     @if (session('success'))
         <p style="color:green">{{ session('success') }}</p>
     @endif
