@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\MemberController;
+use App\Http\Controllers\UserController;
 
 // Halaman publik
 Route::get('/', function () {
@@ -23,10 +24,15 @@ Route::post('/logout', [AuthController::class, 'logout'])
     ->middleware('auth')
     ->name('logout');
 
-// Halaman yang dilindungi (harus login)
+// Halaman yang dilindungi (admin dan petugas, harus login)
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index']);
     Route::resource('books', BookController::class);
     Route::get('/categories', [CategoryController::class, 'index']);
     Route::get('/members', [MemberController::class, 'index']);
+});
+
+// Khusus admin (Gate manage-users)
+Route::middleware(['auth', 'can:manage-users'])->group(function () {
+    Route::resource('users', UserController::class)->only(['index']);
 });
