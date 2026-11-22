@@ -24,27 +24,27 @@ class BookPolicy
     }
 
     /**
-     * Menambah buku.
+     * Menambah buku (hanya admin).
      */
     public function create(User $user): bool
     {
-        return in_array($user->role, ['admin', 'petugas'], true);
+        return $user->role === 'admin';
     }
 
     /**
-     * Mengubah buku.
+     * Mengubah buku (hanya admin).
      */
     public function update(User $user, Book $book): bool
     {
-        return in_array($user->role, ['admin', 'petugas'], true);
+        return $user->role === 'admin';
     }
 
     /**
-     * Menghapus buku.
+     * Menghapus buku (hanya admin).
      */
     public function delete(User $user, Book $book): bool
     {
-        return in_array($user->role, ['admin', 'petugas'], true);
+        return $user->role === 'admin';
     }
 
     /**
